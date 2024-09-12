@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './Dashboard';
 
@@ -10,23 +10,12 @@ const App = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route exact path="/login">
-          {isAuthenticated() ? <Redirect to="/dashboard" /> : <Login setAuthToken={setAuthToken} />}
-        </Route>
-        <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={isAuthenticated} />
-      </Switch>
+      <Routes>
+        <Route path="/login" element={isAuthenticated() ? <Navigate to="/dashboard" /> : <Login setAuthToken={setAuthToken} />} />
+        <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />
+      </Routes>
     </Router>
   );
 };
-
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated() ? <Component {...props} /> : <Redirect to="/login" />
-    }
-  />
-);
 
 export default App;
