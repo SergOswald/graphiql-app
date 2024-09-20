@@ -5,21 +5,21 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 4000;
+const PORT = 5173;
 
 // Middleware
-app.use(cors());  // Allow cross-origin requests
-app.use(bodyParser.json());  // Parse incoming JSON requests
+app.use(cors());
+app.use(express.json());
 
 // Secret key for JWT
 const JWT_SECRET = 'your_secret_key';
 
-// Dummy users for demonstration (In production, you would query a database)
+// Dummy users for demonstration
 const users = [
   {
     id: 1,
-    username: 'testuser',
-    password: bcrypt.hashSync('password123', 8),  // Password is hashed for security
+    username: 'test',
+    password: bcrypt.hashSync('123', 8),  // Password is hashed when the user is created
   },
 ];
 
@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
     return res.status(404).json({ message: 'User not found' });
   }
 
-  // Check if the password is correct
+  // Check if the password is correct using bcrypt.compareSync()
   const isPasswordValid = bcrypt.compareSync(password, user.password);
 
   if (!isPasswordValid) {
@@ -42,10 +42,11 @@ app.post('/login', (req, res) => {
   }
 
   // Create a token with the user's ID
-  const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+  //const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
   // Send the token to the client
-  res.json({ token });
+ // res.json({ token });
+   res.json({ message: 'Login successful!' });
 });
 
 // Middleware to verify the token for protected routes

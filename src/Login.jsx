@@ -11,7 +11,10 @@ const Login = ({ setAuthToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/login', { username, password });
+      const response = await axios.post('http://localhost:5173/login', { 
+        username: 'test',
+        password: '123'
+      });
       const { token } = response.data;
 
       // Save the token in localStorage
